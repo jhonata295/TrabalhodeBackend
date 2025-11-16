@@ -1,0 +1,102 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API Monitoramento Fitness",
+    "version": "1.0.0",
+    "description": "API para monitoramento fitness e saúde (Usuários)."
+  },
+  "servers": [
+    { "url": "http://localhost:3000/api/v1" }
+  ],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": "Registrar usuário",
+        "requestBody": { "required": true,
+          "content": { "application/json": {
+            "schema": { "$ref": "#/components/schemas/Register" }
+          }}
+        },
+        "responses": { "201": { "description": "Usuário criado" }, "400": { "description": "Erro" } }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "requestBody": { "required": true,
+          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Login" } } }
+        },
+        "responses": { "200": { "description": "Retorna token" }, "401": { "description": "Credenciais inválidas" } }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Listar usuários (protegido)",
+        "security": [{ "bearerAuth": [] }],
+        "responses": { "200": { "description": "Lista de usuários" } }
+      },
+      "post": {
+        "summary": "Criar usuário (protegido)",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } } },
+        "responses": { "201": { "description": "Usuário criado" } }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": "Obter usuário por id (protegido)",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "200": { "description": "Usuário" }, "404": { "description": "Não encontrado" } }
+      },
+      "put": {
+        "summary": "Atualizar usuário (protegido)",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/User" } } } },
+        "responses": { "200": { "description": "Atualizado" } }
+      },
+      "delete": {
+        "summary": "Remover usuário (protegido)",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "responses": { "204": { "description": "Removido" } }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" }
+    },
+    "schemas": {
+      "Register": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "example": "João" },
+          "email": { "type": "string", "example": "joao@ex.com" },
+          "password": { "type": "string", "example": "123456" }
+        },
+        "required": ["name", "email", "password"]
+      },
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "example": "joao@ex.com" },
+          "password": { "type": "string", "example": "123456" }
+        },
+        "required": ["email", "password"]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "password": { "type": "string" },
+          "age": { "type": "number" },
+          "weight": { "type": "number" },
+          "height": { "type": "number" }
+        }
+      }
+    }
+  }
+}

@@ -1,8 +1,4 @@
-# =========================
-# Node.js / Express Backend
-# =========================
-
-# Dependências
+# Node modules
 node_modules/
 
 # Logs
@@ -10,44 +6,31 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-logs/
-*.log
+lerna-debug.log*
 
-# Ambiente
+# Environment variables
 .env
 .env.local
-.env.production
-.env.development
-.env.test
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Cache
-.cache/
-.tmp/
-dist/
-build/
+# Editor folders
+.vscode/
+.idea/
 
-# Sistema operacional
+# OS files
 .DS_Store
 Thumbs.db
 
-# VSCode
-.vscode/
+# Dist/Build
+dist/
+build/
 
 # Coverage
 coverage/
 
-# Arquivos temporários
-*.tmp
-*.swp
-*.swo
+# Temporary
+tmp/
+temp/
 
-# PM2
-.pids
-*.pid
-
-# Banco SQLite (se usar)
-*.sqlite
-*.sqlite-journal
-
-# Uploads (se houver)
-uploads/

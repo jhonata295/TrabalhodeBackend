@@ -1,22 +1,23 @@
 # TrabalhodeBackend
 
-# 🏋️‍♂️ API de Monitoramento Fitness / Saúde
+# API de Monitoramento Fitness / Saúde 🏋️‍♂️💓
 
-Este repositório contém o backend da aplicação de Monitoramento Fitness/Saúde, desenvolvida como parte da disciplina de Desenvolvimento Backend.  
-A API permite o gerenciamento de usuários, atividades, treinos e metas de saúde.
-
----
-
-## 📌 Tecnologias Utilizadas
-
-- **Node.js**
-- **Express.js**
-- **MongoDB** (ou outra base — ajustar conforme progresso)
-- **Nodemon** (ambiente de desenvolvimento)
-- **JWT** (para autenticação)
-- **bcrypt** (para hashing de senhas)
+Esta é uma API RESTful desenvolvida com **Node.js** e **Express**, criada para o monitoramento de dados de saúde e condicionamento físico.  
+O projeto foi estruturado utilizando boas práticas de desenvolvimento, separação de camadas, rotas organizadas e documentação clara.
 
 ---
 
-## 📂 Estrutura do Projeto
+## 📌 Funcionalidades da API
+
+- Cadastro de usuários
+- Registro de atividades físicas
+- Controle de metas e progresso
+- Registro de dados corporais (peso, altura, IMC, gordura corporal, etc.)
+- Autenticação com JWT
+- CRUD completo para a entidade principal definida no projeto
+
+---
+
+## 📂 Estrutura de Pastas
+
 

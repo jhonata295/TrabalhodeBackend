@@ -1,23 +1,110 @@
-# TrabalhodeBackend
+# API de Monitoramento Fitness/Saúde
+🔧 Configuração do Projeto
 
-# API de Monitoramento Fitness / Saúde 🏋️‍♂️💓
+Clonar o repositório
 
-Esta é uma API RESTful desenvolvida com **Node.js** e **Express**, criada para o monitoramento de dados de saúde e condicionamento físico.  
-O projeto foi estruturado utilizando boas práticas de desenvolvimento, separação de camadas, rotas organizadas e documentação clara.
+git clone https://github.com/SEU-USUARIO/SEU-REPOSITORIO.git
+cd SEU-REPOSITORIO
 
----
 
-## 📌 Funcionalidades da API
+Instalar dependências
 
-- Cadastro de usuários
-- Registro de atividades físicas
-- Controle de metas e progresso
-- Registro de dados corporais (peso, altura, IMC, gordura corporal, etc.)
-- Autenticação com JWT
-- CRUD completo para a entidade principal definida no projeto
+npm install
 
----
 
-## 📂 Estrutura de Pastas
+Criar o arquivo .env
 
+PORT=3000
+MONGO_URI=sua_string_de_conexao
+JWT_SECRET=sua_chave_secreta
+
+
+Iniciar o servidor
+
+npm run dev
+
+📦 Dependências Utilizadas
+
+Dependências principais:
+
+express
+
+mongoose (ou outro banco escolhido)
+
+jsonwebtoken
+
+bcryptjs
+
+express-validator
+
+dotenv
+
+Dependências de desenvolvimento:
+
+nodemon
+
+jest
+
+supertest
+
+▶️ Execução
+
+Para rodar o servidor:
+
+npm run dev
+
+
+Para rodar em produção:
+
+npm start
+
+🧪 Como Rodar os Testes
+npm run test
+
+
+Os testes incluem:
+
+Rotas
+
+Controladores
+
+Validações
+
+📌 Exemplos de Uso (Requests)
+Criar usuário (POST)
+POST /api/v1/users
+
+
+Body:
+
+{
+  "nome": "João",
+  "email": "joao@email.com",
+  "senha": "123456"
+}
+
+Login (POST)
+POST /api/v1/login
+
+
+Body:
+
+{
+  "email": "joao@email.com",
+  "senha": "123456"
+}
+
+Buscar todos os usuários (GET)
+GET /api/v1/users
+
+Atualizar usuário (PUT)
+PUT /api/v1/users/:id
+
+Deletar usuário (DELETE)
+DELETE /api/v1/users/:id
+
+👥 Integrantes do Grupo e Divisão de Tarefas
+Integrante	Tarefas
+Jhonata Matos	
+Mario Victor	
 

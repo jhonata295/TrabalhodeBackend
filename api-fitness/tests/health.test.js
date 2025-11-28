@@ -27,40 +27,56 @@ describe('Medidas de Saúde', () => {
       email: 'mario@example.com',
       password: 'senha123'
     });
+
     const res = await request(app).post('/api/v1/users/login').send({
       email: 'mario@example.com',
       password: 'senha123'
     });
+
     token = res.body.token;
   });
 
   it('Criar medida', async () => {
-    const res = await request(app).post('/api/v1/health').set('Authorization', `Bearer ${token}`).send({
-      weight: 75,
-      height: 1.8,
-      date: '2025-11-25'
-    });
+    const res = await request(app)
+      .post('/api/v1/health')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        weight: 75,
+        height: 1.8,
+        date: '2025-11-25'
+      });
+
     expect(res.statusCode).toBe(201);
     measureId = res.body._id;
   });
 
   it('Listar medidas', async () => {
-    const res = await request(app).get('/api/v1/health').set('Authorization', `Bearer ${token}`);
+    const res = await request(app)
+      .get('/api/v1/health')
+      .set('Authorization', `Bearer ${token}`);
+
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toBeGreaterThan(0);
   });
 
   it('Atualizar medida', async () => {
-    const res = await request(app).put(`/api/v1/health/${measureId}`).set('Authorization', `Bearer ${token}`).send({
-      weight: 78
-    });
+    const res = await request(app)
+      .put(`/api/v1/health/${measureId}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        weight: 78
+      });
+
     expect(res.statusCode).toBe(200);
     expect(res.body.weight).toBe(78);
   });
 
   it('Deletar medida', async () => {
-    const res = await request(app).delete(`/api/v1/health/${measureId}`).set('Authorization', `Bearer ${token}`);
+    const res = await request(app)
+      .delete(`/api/v1/health/${measureId}`)
+      .set('Authorization', `Bearer ${token}`);
+
     expect(res.statusCode).toBe(200);
-    expect(res.body.message).toBe('Medida deletada');
+    expect(res.body.message).toBe('Medida deletada com sucesso');
   });
 });

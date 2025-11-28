@@ -37,6 +37,20 @@
           "password": { "type": "string", "example": "senha123" }
         }
       },
+      "UserProfile": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+      "TokenResponse": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." }
+        }
+      },
       "HealthMeasureCreate": {
         "type": "object",
         "required": ["weight", "height", "date"],
@@ -49,12 +63,15 @@
       "HealthMeasure": {
         "type": "object",
         "properties": {
-          "_id": { "type": "string", "example": "64f1a2abc..." },
-          "user": { "type": "string", "example": "64f1a2abcUserId..." },
-          "weight": { "type": "number", "example": 70 },
-          "height": { "type": "number", "example": 1.75 },
-          "date": { "type": "string", "format": "date", "example": "2025-11-25" },
-          "createdAt": { "type": "string", "format": "date-time", "example": "2025-11-25T12:00:00Z" }
+          "_id": { "type": "string" },
+          "user": {
+            "type": "string",
+            "description": "ID do usuário autenticado (gerado automaticamente pelo backend via JWT)"
+          },
+          "weight": { "type": "number" },
+          "height": { "type": "number" },
+          "date": { "type": "string", "format": "date" },
+          "createdAt": { "type": "string", "format": "date-time" }
         }
       },
       "ErrorResponse": {
@@ -81,22 +98,19 @@
             "description": "Usuário criado com sucesso",
             "content": {
               "application/json": {
-                "example": {
-                  "id": "64f1a2abc123...",
-                  "name": "Jhonata Matos",
-                  "email": "jhona@example.com"
-                }
+                "schema": { "$ref": "#/components/schemas/UserProfile" }
               }
             }
           },
           "400": {
-            "description": "Erro de validação / usuário já existe",
+            "description": "Erro de validação ou usuário já existe",
             "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
           }
         },
         "security": []
       }
     },
+
     "/users/login": {
       "post": {
         "tags": ["Usuários"],
@@ -109,12 +123,10 @@
         },
         "responses": {
           "200": {
-            "description": "Login realizado com sucesso (retorna token JWT)",
+            "description": "Login realizado com sucesso",
             "content": {
               "application/json": {
-                "example": {
-                  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-                }
+                "schema": { "$ref": "#/components/schemas/TokenResponse" }
               }
             }
           },
@@ -126,6 +138,7 @@
         "security": []
       }
     },
+
     "/users/me": {
       "get": {
         "tags": ["Usuários"],
@@ -136,7 +149,7 @@
             "description": "Perfil do usuário",
             "content": {
               "application/json": {
-                "example": { "id": "64f1a2abc123...", "name": "Jhonata Matos", "email": "jhona@example.com" }
+                "schema": { "$ref": "#/components/schemas/UserProfile" }
               }
             }
           },
@@ -148,12 +161,17 @@
       },
       "put": {
         "tags": ["Usuários"],
-        "summary": "Atualizar perfil do usuário autenticado",
+        "summary": "Atualizar perfil",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
-            "application/json": { "schema": { "type": "object", "properties": { "name": { "type": "string", "example": "Novo Nome" } } } }
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "name": { "type": "string", "example": "Novo Nome" } }
+              }
+            }
           }
         },
         "responses": {
@@ -161,7 +179,7 @@
             "description": "Perfil atualizado",
             "content": {
               "application/json": {
-                "example": { "id": "64f1a2abc123...", "name": "Novo Nome", "email": "jhona@example.com" }
+                "schema": { "$ref": "#/components/schemas/UserProfile" }
               }
             }
           },
@@ -173,12 +191,16 @@
       },
       "delete": {
         "tags": ["Usuários"],
-        "summary": "Deletar usuário autenticado",
+        "summary": "Excluir usuário",
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
-            "description": "Usuário deletado com sucesso",
-            "content": { "application/json": { "example": { "message": "Usuário deletado" } } }
+            "description": "Usuário deletado",
+            "content": {
+              "application/json": {
+                "example": { "message": "Usuário deletado" }
+              }
+            }
           },
           "401": {
             "description": "Não autorizado",
@@ -187,19 +209,26 @@
         }
       }
     },
+
     "/health": {
       "post": {
         "tags": ["Medidas de Saúde"],
-        "summary": "Criar medida (usuário autenticado)",
+        "summary": "Criar medida",
         "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HealthMeasureCreate" } } }
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/HealthMeasureCreate" } }
+          }
         },
         "responses": {
           "201": {
             "description": "Medida criada",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HealthMeasure" } } }
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HealthMeasure" }
+              }
+            }
           },
           "400": {
             "description": "Erro de validação",
@@ -213,23 +242,17 @@
       },
       "get": {
         "tags": ["Medidas de Saúde"],
-        "summary": "Listar medidas do usuário autenticado",
+        "summary": "Listar medidas",
         "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "Lista de medidas",
             "content": {
               "application/json": {
-                "example": [
-                  {
-                    "_id": "123abc",
-                    "user": "64f1a2abcUserId...",
-                    "weight": 70,
-                    "height": 1.75,
-                    "date": "2025-11-25",
-                    "createdAt": "2025-11-25T12:00:00Z"
-                  }
-                ]
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/HealthMeasure" }
+                }
               }
             }
           },
@@ -240,16 +263,27 @@
         }
       }
     },
+
     "/health/{id}": {
       "get": {
         "tags": ["Medidas de Saúde"],
-        "summary": "Obter medida específica (usuário autenticado)",
+        "summary": "Obter medida específica",
         "security": [{ "bearerAuth": [] }],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID da medida"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Medida encontrada",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HealthMeasure" } } }
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/HealthMeasure" } }
+            }
           },
           "404": {
             "description": "Medida não encontrada",
@@ -263,17 +297,29 @@
       },
       "put": {
         "tags": ["Medidas de Saúde"],
-        "summary": "Atualizar medida (usuário autenticado)",
+        "summary": "Atualizar medida",
         "security": [{ "bearerAuth": [] }],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID da medida"
+          }
+        ],
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HealthMeasureCreate" } } }
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/HealthMeasureCreate" } }
+          }
         },
         "responses": {
           "200": {
             "description": "Medida atualizada",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HealthMeasure" } } }
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/HealthMeasure" } }
+            }
           },
           "404": {
             "description": "Medida não encontrada",
@@ -287,13 +333,22 @@
       },
       "delete": {
         "tags": ["Medidas de Saúde"],
-        "summary": "Deletar medida (usuário autenticado)",
+        "summary": "Deletar medida",
         "security": [{ "bearerAuth": [] }],
-        "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Medida deletada",
-            "content": { "application/json": { "example": { "message": "Medida deletada" } } }
+            "content": {
+              "application/json": { "example": { "message": "Medida deletada" } }
+            }
           },
           "404": {
             "description": "Medida não encontrada",
